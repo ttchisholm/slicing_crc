@@ -1,0 +1,5 @@
+- check synth
+- file header
+- gen table script
+- testbench (random)
+- ensure slice length power of 2
