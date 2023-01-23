@@ -1,5 +1,5 @@
 module slicing_crc #(
-    parameter SLICE_LENGTH = 1,
+    parameter SLICE_LENGTH = 8,
     parameter INITIAL_CRC = 32'hFFFFFFFF,
     parameter INVERT_OUTPUT = 1,
     parameter REGISTER_OUTPUT = 1

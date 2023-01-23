@@ -22,9 +22,6 @@ class CRC_TB:
         self.dut.data.value = 0
         self.dut.valid.value = 0
 
-        
-        
-
 @cocotb.test()
 async def crc_test(dut):
     
@@ -60,7 +57,7 @@ async def crc_test(dut):
             for i, v in enumerate(ivalues):
                 ivalue = ivalue | (int(v) <<  (i * 8))
                 ivalid = ivalid | (1 << i)
-                
+
             tb.dut.data.value = ivalue
             tb.dut.valid.value = ivalid
             await FallingEdge(tb.dut.clk)
