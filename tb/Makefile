@@ -20,7 +20,7 @@ MODULE = test_slicing_crc
 
 
 # module parameters
-export SLICE_LENGTH ?= 2
+export SLICE_LENGTH ?= 8
 
 ifeq ($(SIM), icarus)
 	PLUSARGS += -fst
