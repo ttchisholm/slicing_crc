@@ -1,5 +1,3 @@
-- check synth
-- file header
-- gen table script
-- testbench (random)
-- ensure slice length power of 2
+- clean + commit synth
+- fmax for 1, 2, 4, 8, 16
+- random valid testbench
