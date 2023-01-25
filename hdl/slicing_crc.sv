@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 module slicing_crc #(
     parameter SLICE_LENGTH = 8,
     parameter INITIAL_CRC = 32'hFFFFFFFF,

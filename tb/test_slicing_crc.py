@@ -2,13 +2,18 @@ from asyncore import loop
 import cocotb
 from cocotb.triggers import Timer, RisingEdge, FallingEdge, Edge, NextTimeStep
 from cocotb.clock import Clock
-from cocotb.result import TestFailure
+from cocotb_test.simulator import run
 
+
+import glob
+import pytest
 import numpy as np
 import zlib
+import os
 
 import debugpy
 
+from generate_crc_tables import write_crc_tables
 
 class CRC_TB:
     def __init__(self, dut):
@@ -71,3 +76,36 @@ async def crc_test(dut):
         f'CRC result invalid (expected={res:04x}, actual={tb.dut.crc.value.integer:04x})'
    
 
+
+@pytest.mark.parametrize(
+    "parameters", [
+        {"SLICE_LENGTH": "1" },  
+        {"SLICE_LENGTH": "2" }, 
+        {"SLICE_LENGTH": "4" }, 
+        {"SLICE_LENGTH": "8" },  
+        {"SLICE_LENGTH": "16" },
+        {"SLICE_LENGTH": "16", "REGISTER_OUTPUT" : "0" },   
+        ])
+def test_slicing_crc(parameters):
+
+    polynomial = 0x04C11DB7 # Polynomial for CRC32 (Ethernet)
+    sim_build = "./sim_build/" + ",".join((f"{key}={value}" for key, value in parameters.items()))
+
+    if not os.path.isdir(sim_build):
+         os.mkdir(sim_build)
+
+    write_crc_tables(os.path.join(sim_build, 'crc_tables.mem'), polynomial, int(parameters['SLICE_LENGTH']))
+
+    run(
+        verilog_sources=glob.glob('../hdl/slicing_crc.sv'),
+        toplevel="slicing_crc",
+
+        module="test_slicing_crc",
+        simulator="icarus",
+        verilog_compile_args=["-g2012"],
+        includes=["../hdl", "../../", "../../../"],
+
+        parameters=parameters,
+        extra_env=parameters,
+        sim_build=sim_build
+    )
