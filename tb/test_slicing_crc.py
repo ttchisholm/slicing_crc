@@ -1,4 +1,3 @@
-from asyncore import loop
 import cocotb
 from cocotb.triggers import Timer, RisingEdge, FallingEdge, Edge, NextTimeStep
 from cocotb.clock import Clock
@@ -10,8 +9,6 @@ import pytest
 import numpy as np
 import zlib
 import os
-
-import debugpy
 
 from generate_crc_tables import write_crc_tables
 

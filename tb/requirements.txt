@@ -1,0 +1,3 @@
+cocotb==1.7.1
+cocotb-test==0.2.4
+numpy==1.23.5
