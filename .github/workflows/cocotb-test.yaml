@@ -28,4 +28,5 @@ jobs:
         sudo apt install -y --no-install-recommends iverilog
     - name: Verify with cocotb & icarus
       run: |
+        cd tb
         pytest
