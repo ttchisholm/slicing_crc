@@ -88,8 +88,7 @@ def test_slicing_crc(parameters):
     polynomial = 0x04C11DB7 # Polynomial for CRC32 (Ethernet)
     sim_build = "./sim_build/" + ",".join((f"{key}={value}" for key, value in parameters.items()))
 
-    if not os.path.isdir(sim_build):
-         os.mkdir(sim_build)
+    os.makedirs(sim_build, exist_ok=True)
 
     write_crc_tables(os.path.join(sim_build, 'crc_tables.mem'), polynomial, int(parameters['SLICE_LENGTH']))
 

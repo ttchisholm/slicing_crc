@@ -4,7 +4,7 @@ name: cocotb-test
 on: [push]
 
 jobs:
-  build-linux:
+  run-pytest:
     runs-on: ubuntu-latest
 
     steps:
