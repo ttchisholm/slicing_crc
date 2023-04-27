@@ -32,6 +32,11 @@ ifeq ($(SIM), icarus)
 		COMPILE_ARGS += -s iverilog_dump
 	endif
 
+else ifeq ($(SIM), verilator)
+	COMPILE_ARGS += -GSLICE_LENGTH=$(SLICE_LENGTH)
+	ifeq ($(WAVES), 1)
+		COMPILE_ARGS += --trace-fst --trace-structs
+	endif 
 endif
 
 # include cocotb's make rules to take care of the simulator setup
