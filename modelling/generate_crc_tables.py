@@ -54,6 +54,7 @@ def write_crc_tables(path, poly, n, bit_reverse_poly=True):
 if __name__ == "__main__":
 
     polynomial = 0x04C11DB7 # Polynomial for CRC32 (Ethernet)
+    max_slice_length = 16
 
-    write_crc_tables('../hdl/crc_tables.mem', polynomial, n, 16)
+    write_crc_tables('../hdl/crc_tables.mem', polynomial, max_slice_length, 16)
 

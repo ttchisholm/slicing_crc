@@ -26,7 +26,9 @@ module slicing_crc #(
     parameter SLICE_LENGTH = 8,
     parameter INITIAL_CRC = 32'hFFFFFFFF,
     parameter INVERT_OUTPUT = 1,
-    parameter REGISTER_OUTPUT = 1
+    parameter REGISTER_OUTPUT = 1,
+
+    localparam MAX_SLICE_LENGTH = 16 // Number of lines in crc_tables.mem
 ) (
     input wire clk,
     input wire reset,
@@ -36,9 +38,9 @@ module slicing_crc #(
 );
 
     // Read CRC lookup tables
-    logic [31:0] crc_tables [SLICE_LENGTH][256];
+    logic [31:0] crc_tables [MAX_SLICE_LENGTH][256];
     initial begin
-        $readmemh("crc_tables.mem", crc_tables); //todo check dimensions
+        $readmemh("crc_tables.mem", crc_tables);
     end
 
     // Find number of bytes valid in this cycle
