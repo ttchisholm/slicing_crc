@@ -38,13 +38,13 @@ class CRC_TB:
     def __init__(self, dut):
         self.dut = dut
 
-        self.data_width = len(self.dut.data)
+        self.data_width = len(self.dut.i_data)
         self.clk_period = round(1 / (10.3125 / self.data_width), 2) # ps precision
 
-        cocotb.start_soon(Clock(dut.clk, self.clk_period, units="ns").start())
+        cocotb.start_soon(Clock(dut.i_clk, self.clk_period, units="ns").start())
 
-        self.dut.data.value = 0
-        self.dut.valid.value = 0
+        self.dut.i_data.value = 0
+        self.dut.i_valid.value = 0
 
 @cocotb.test()
 async def crc_test(dut):
@@ -68,10 +68,10 @@ async def crc_test(dut):
 
     for tv, res in zip(test_vectors, results):
 
-        await FallingEdge(tb.dut.clk)
-        tb.dut.reset.value = 1
-        await FallingEdge(tb.dut.clk)
-        tb.dut.reset.value = 0
+        await FallingEdge(tb.dut.i_clk)
+        tb.dut.i_reset.value = 1
+        await FallingEdge(tb.dut.i_clk)
+        tb.dut.i_reset.value = 0
         
 
         for ivalues in chunker(tv, input_width_bytes):
@@ -82,17 +82,17 @@ async def crc_test(dut):
                 ivalue = ivalue | (int(v) <<  (i * 8))
                 ivalid = ivalid | (1 << i)
 
-            tb.dut.data.value = ivalue
-            tb.dut.valid.value = ivalid
-            await FallingEdge(tb.dut.clk)
+            tb.dut.i_data.value = ivalue
+            tb.dut.i_valid.value = ivalid
+            await FallingEdge(tb.dut.i_clk)
         
-        tb.dut.valid.value = 0
+        tb.dut.i_valid.value = 0
 
         if (tb.dut.REGISTER_OUTPUT):
-             await RisingEdge(tb.dut.clk)
+             await RisingEdge(tb.dut.i_clk)
 
-        assert tb.dut.crc.value.integer == res, \
-        f'CRC result invalid (expected={res:04x}, actual={tb.dut.crc.value.integer:04x})'
+        assert tb.dut.o_crc.value.integer == res, \
+        f'CRC result invalid (expected={res:04x}, actual={tb.dut.o_crc.value.integer:04x})'
    
 
 
