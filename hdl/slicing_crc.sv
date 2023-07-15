@@ -61,17 +61,15 @@ module slicing_crc #(
         num_input_bytes = 0;
         for (int i = 0; i < SLICE_LENGTH; i++) begin
             if (i_valid[i]) begin
-                num_input_bytes = NUM_INPUT_BYTES_WIDTH'(i + 1);
+                num_input_bytes = NUM_INPUT_BYTES_WIDTH '(i + 1);
             end
         end
     end
 
-    assign any_valid = num_input_bytes != 0;
+    assign any_valid = |i_valid;
 
     // CRC storage
     logic [31:0] prev_crc, crc_calc, crc_out;
-
-    initial prev_crc = INITIAL_CRC;
 
     always_ff @(posedge i_clk)
     if (i_reset) begin

@@ -6,3 +6,9 @@ sim_build
 iverilog_dump.v
 *.mem
 .pytest_cache
+
+transcript
+modelsim.ini
+vsim.wlf
+*.ucdb
+covhtmlreport

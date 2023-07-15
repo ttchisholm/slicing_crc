@@ -1,7 +1,7 @@
 # Makefile
 
 # defaults
-SIM ?= icarus
+SIM ?= modelsim
 TOPLEVEL_LANG ?= verilog
 WAVES ?= 1
 
@@ -16,8 +16,6 @@ TOPLEVEL = slicing_crc
 
 # MODULE is the basename of the Python test file
 MODULE = test_slicing_crc
-
-
 
 # module parameters
 export SLICE_LENGTH ?= 8
@@ -37,6 +35,12 @@ else ifeq ($(SIM), verilator)
 	ifeq ($(WAVES), 1)
 		COMPILE_ARGS += --trace-fst --trace-structs
 	endif 
+else ifeq ($(SIM), modelsim)
+	COMPILE_ARGS += +cover=sbceft
+	SIM_ARGS += -GSLICE_LENGTH=$(SLICE_LENGTH)
+	SIM_ARGS += -coverage
+	SIM_ARGS += -no_autoacc
+	SIM_ARGS +=  -do \" coverage save -onexit $(TOPLEVEL).ucdb; run -all;exit\"
 endif
 
 # include cocotb's make rules to take care of the simulator setup
